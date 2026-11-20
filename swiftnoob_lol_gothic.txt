@@ -8930,7 +8930,7 @@ textButton.Position = UDim2.new(1, n33, 0.5, 0)
 textButton.Size = UDim2.fromOffset(n34, n34)
 textButton.BackgroundTransparency = 1
 textButton.BorderSizePixel = 0
-textButton.Text = "▲"
+textButton.Text = "â–²"
 textButton.TextSize = textSize
 textButton.AutoButtonColor = false
 textButton.FontFace = menu.Fonts.Main
@@ -8942,7 +8942,7 @@ textButton2.Position = UDim2.new(1, -4, 0.5, 0)
 textButton2.Size = UDim2.fromOffset(n34, n34)
 textButton2.BackgroundTransparency = 1
 textButton2.BorderSizePixel = 0
-textButton2.Text = "▼"
+textButton2.Text = "â–¼"
 textButton2.TextSize = textSize
 textButton2.AutoButtonColor = v86[153]
 textButton2.FontFace = menu.Fonts.Main
@@ -9311,7 +9311,7 @@ uiStroke.Parent = frame3
 local instance4 = Instance.new(v86[135])
 instance4.BackgroundTransparency = 1
 instance4.Size = UDim2.fromScale(1, 1)
-instance4.Text = "✓"
+instance4.Text = "âœ“"
 instance4.FontFace = v116.Bold
 instance4.TextSize = 15
 instance4.TextColor3 = Color3.fromRGB(v86[108], v86[108], 255)
@@ -11122,7 +11122,7 @@ v141 = label
 end
 end
 
-str7 = ("%s  ›  Requires %s: %s"):format(arg2, v141, groupSpec.Option or "On")
+str7 = ("%s  â€º  Requires %s: %s"):format(arg2, v141, groupSpec.Option or "On")
 local resolveFrame = tbl18.ResolveFrame
 
 tbl19 = {
@@ -11191,7 +11191,7 @@ end,
 
 local title = v142.Title
 assert(typeof(title) == "string", "Container pane title must be a string")
-v142:CollectSearchHits(("%s  ›  %s"):format(str7, title), arg3, arg4, tbl20)
+v142:CollectSearchHits(("%s  â€º  %s"):format(str7, title), arg3, arg4, tbl20)
 end
 end
 end
@@ -11218,7 +11218,7 @@ v141:_RevealGear()
 end,
 }
 
-v141:CollectSearchHits(("%s  ›  %s"):format(str7, tostring(gearTooltip)), arg3, arg4, tbl20)
+v141:CollectSearchHits(("%s  â€º  %s"):format(str7, tostring(gearTooltip)), arg3, arg4, tbl20)
 end
 end
 
@@ -11733,7 +11733,7 @@ textLabel3.Position = UDim2.new(1, -11, 0.5, 0)
 textLabel3.Size = UDim2.fromOffset(16, 24)
 textLabel3.BackgroundTransparency = 1
 textLabel3.BorderSizePixel = 0
-textLabel3.Text = "›"
+textLabel3.Text = "â€º"
 textLabel3.TextSize = 18
 textLabel3.FontFace = v118.SemiBold
 arg3:Bind(textLabel3, "TextColor3", "Unselected")
@@ -11918,7 +11918,7 @@ instance3.Position = UDim2.new(v86[63], -10, 0, 10)
 instance3.Size = UDim2.fromOffset(26, v86[200])
 instance3.BackgroundTransparency = v86[63]
 instance3.BorderSizePixel = 0
-instance3.Text = "×"
+instance3.Text = "Ã—"
 instance3.TextSize = 18
 instance3.FontFace = v118.SemiBold
 instance3.AutoButtonColor = false
@@ -14707,13 +14707,13 @@ GetFrame = fn36,
 })
 end
 
-str7 = ("%s  ›  %s"):format(tabLabel, pageLabel)
+str7 = ("%s  â€º  %s"):format(tabLabel, pageLabel)
 end
 
 local title = v120.Section.Title
 local tbl20 = {}
 local open = host.Open
-v120.Collect(("%s  ›  %s"):format(str7, title), open, tbl20)
+v120.Collect(("%s  â€º  %s"):format(str7, title), open, tbl20)
 local v121 = tbl20[1]
 local reveal = nil
 local getFrame = fn36
@@ -20313,7 +20313,7 @@ return bi.c
 end
 end
 do -- bj
-local function fn35() tbl17 .a5();return{ColorAnimations={Entries= tbl17 .i().atomic({})},Notifications={Enabled=true,Side="TopLeft",Size=15,Font="Inconsolata",Offset=0},Theme={Accent=Color3.fromRGB(154,213,222),Outline=Color3.fromRGB(24,25,24),Background=Color3.fromRGB(0,0,0),ElementBackground=Color3.fromRGB(6,6,6),TabButtonSelected=Color3.fromRGB(51,65,70),Unselected=Color3.fromRGB(75,72,72),TextColor=Color3.fromRGB(197,197,197),ToggleCircleUnselected=Color3.fromRGB(70,85,87),ToggleBackgroundUnselected=Color3.fromRGB(12,13,13)},AutoExecuteScript={Enabled=false}};end
+local function fn35() tbl17 .a5();return{ColorAnimations={Entries= tbl17 .i().atomic({})},Notifications={Enabled=true,Side="TopLeft",Size=15,Font="Inconsolata",Offset=0},Theme={Accent=Color3.fromRGB(190,28,72),Outline=Color3.fromRGB(58,16,40),Background=Color3.fromRGB(8,4,11),ElementBackground=Color3.fromRGB(15,7,18),TabButtonSelected=Color3.fromRGB(66,16,44),Unselected=Color3.fromRGB(104,76,94),TextColor=Color3.fromRGB(222,200,216),ToggleCircleUnselected=Color3.fromRGB(88,48,72),ToggleBackgroundUnselected=Color3.fromRGB(22,10,20)},AutoExecuteScript={Enabled=false}};end
 
 tbl17.bj = function()
 local bj = tbl17.cache.bj
@@ -66178,11 +66178,11 @@ end
 
 -- Try to equip a specific item via the LocalFighter.
 -- Returns true if a known equip method was found and called.
--- item:Equip() internally does clientFighter:EquipItem(self.index) — no arg needed.
+-- item:Equip() internally does clientFighter:EquipItem(self.index) â€” no arg needed.
 local function rageEquipItem(item)
 	local ok = false
 	pcall(function()
-		-- 0. LocalFighter:EquipItem(index) — what the game's own hotkeys call
+		-- 0. LocalFighter:EquipItem(index) â€” what the game's own hotkeys call
 		-- (item:Equip() alone does not change the equipped item).
 		do
 			local fc0 = require(LocalPlayer.PlayerScripts.Controllers.FighterController)
@@ -66196,14 +66196,14 @@ local function rageEquipItem(item)
 			end
 		end
 
-		-- 1. item:Equip() — game-native; uses item.ClientFighter internally.
+		-- 1. item:Equip() â€” game-native; uses item.ClientFighter internally.
 		if type(item.Equip) == "function" then
 			item:Equip()
 			ok = true
 			return
 		end
 
-		-- 2. lf:EquipItem(index) — equivalent to what Equip() does internally.
+		-- 2. lf:EquipItem(index) â€” equivalent to what Equip() does internally.
 		local fc = require(LocalPlayer.PlayerScripts.Controllers.FighterController)
 		local lf = fc and fc.LocalFighter
 		if not lf then return end
@@ -66591,7 +66591,7 @@ local function rageGetAction()
 		return { type="Swap", item=backupItem.item, slot=backupItem.slot, isMelee=false }
 	end
 
-	-- Best item not equipped → return Swap.
+	-- Best item not equipped â†’ return Swap.
 	-- Also honour a recent swap attempt (equip is async): for up to 2 s after
 	-- we asked to equip bestItem, trust it as equipped to avoid a Swap loop.
 	local equipped = isEquipped(bestItem.item)
@@ -66898,7 +66898,7 @@ local function rageFire()
 				rage._swapTarget      = action.item
 				rage._swapTargetUntil = now + 2.0
 			else
-				rage._purgeEvade = true  -- equip failed → evade
+				rage._purgeEvade = true  -- equip failed â†’ evade
 			end
 		end
 		return false
@@ -66959,7 +66959,7 @@ local function rageFire()
 		return false  -- hold fire while reloading
 	end
 
-	-- action.type == "Attack" — also gate on server reload attributes and
+	-- action.type == "Attack" â€” also gate on server reload attributes and
 	-- the segmented-reload window (shotgun refills one shell at a time).
 	if not isMelee then
 		local serverReloading = false
@@ -67247,7 +67247,7 @@ local function rageFire()
 
 	-- Knife attack-cooldown check (deferred from above so we can issue far-pos).
 	-- The server will see us at the far position while the cooldown is active,
-	-- matching MeleeStrategy:Plan() "傳送到隨機遠處，不攻擊" behaviour.
+	-- matching MeleeStrategy:Plan() "å‚³é€åˆ°éš¨æ©Ÿé è™•ï¼Œä¸æ”»æ“Š" behaviour.
 	-- Backstab: the server counts a knife hit as a crit (150) when the view
 	-- yaw it last received matches the victim's facing (measured in game), so
 	-- keep sending that view while we hold/attack.
@@ -67704,8 +67704,8 @@ end
 -- The same render restore hides it locally. Bounded on purpose (the doc uses
 -- extreme coordinates, which read as out-of-bounds and get you killed/kicked).
 -- Evasion uses the same double-buffer pattern as attack teleport:
---   Heartbeat  → root = evasionDest (server replication sees this)
---   First(100) → root = real pos    (camera update at 300 sees real pos)
+--   Heartbeat  â†’ root = evasionDest (server replication sees this)
+--   First(100) â†’ root = real pos    (camera update at 300 sees real pos)
 -- So the camera never observes the evasion position at all.
 -- DefensiveCFrame: gun -> face the enemy, unarmed -> face away, knife -> random spin.
 local function rageDefensiveCFrame(cf)
@@ -72858,7 +72858,7 @@ MD3.LYSkinData["Warpstone (Custom Skin)"] = [=[{'src':'Elixir','il':{'Image':'rb
 			if existing and MD3.LYSkinData[name] then
 				local built = existing:GetAttribute("__LYBuild")
 				if built == nil then
-					-- built by an older LY (before the version tag): its parts carry "__LY…" attributes
+					-- built by an older LY (before the version tag): its parts carry "__LYâ€¦" attributes
 					for _, descendant in existing:GetDescendants() do
 						for key in descendant:GetAttributes() do
 							if string.sub(key, 1, 4) == "__LY" then
@@ -73426,6 +73426,22 @@ local boot = (function()
     if theme ~= nil then
         for k, v in next, theme do
             if Theme.Tokens[k] ~= nil and typeof(v) == "Color3" then Theme.refresh(k, v) end
+        end
+    end
+
+    -- GOTH THEME: overrides any older saved theme/config colours. Set to false to use your saved theme again.
+    local GOTH_FORCE_THEME = true
+    if GOTH_FORCE_THEME then
+        local goth = {
+            Accent = Color3.fromRGB(190, 28, 72), Outline = Color3.fromRGB(58, 16, 40),
+            ElementBackground = Color3.fromRGB(15, 7, 18), TabButtonSelected = Color3.fromRGB(66, 16, 44),
+            Unselected = Color3.fromRGB(104, 76, 94), TextColor = Color3.fromRGB(222, 200, 216),
+            ToggleCircleUnselected = Color3.fromRGB(88, 48, 72), ToggleBackgroundUnselected = Color3.fromRGB(22, 10, 20),
+            TabHighlight = Color3.fromRGB(66, 16, 44), TabShadow = Color3.fromRGB(48, 10, 40),
+            Background = Color3.fromRGB(8, 4, 11),
+        }
+        for k, v in next, goth do
+            if Theme.Tokens[k] ~= nil then pcall(Theme.refresh, k, v) end
         end
     end
 
