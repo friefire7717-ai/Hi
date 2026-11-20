@@ -2425,6 +2425,12 @@ end
 
 index2.BindGradient = function(arg, arg2, arg3, arg4)
 arg2.Color = fn36(arg3, arg4)
+task.defer(function()
+    local gp = arg2.Parent
+    if gp and gp:IsA("GuiObject") and gp.Name ~= "GothBackground" and gp.BackgroundTransparency == 0 then
+        gp.BackgroundTransparency = 0.32
+    end
+end)
 table.insert(arg._gradients, { Gradient = arg2, Tokens = arg3, Times = arg4 })
 
 for _, v116 in arg3, nil, nil do
@@ -17101,20 +17107,20 @@ do
     bgImg.Name = "GothBackground"
     bgImg.BackgroundTransparency = 1
     bgImg.Image = GOTH_BG_ID
-    bgImg.ImageTransparency = 0.45
-    bgImg.ImageColor3 = Color3.fromRGB(205, 160, 190)
+    bgImg.ImageTransparency = 0.25
+    bgImg.ImageColor3 = Color3.fromRGB(235, 200, 225)
     bgImg.ScaleType = Enum.ScaleType.Crop
     bgImg.Size = UDim2.fromScale(1, 1)
-    bgImg.ZIndex = frame.ZIndex
-    bgImg.Parent = frame3
+    bgImg.ZIndex = 0
+    bgImg.Parent = frame
     local bgCorner = Instance.new("UICorner")
-    bgCorner.CornerRadius = UDim.new(0, 12)
+    bgCorner.CornerRadius = UDim.new(0, 6)
     bgCorner.Parent = bgImg
     local shade = Instance.new("UIGradient")
     shade.Rotation = 90
     shade.Transparency = NumberSequence.new({
-        NumberSequenceKeypoint.new(0, 0.35),
-        NumberSequenceKeypoint.new(1, 0.85),
+        NumberSequenceKeypoint.new(0, 0),
+        NumberSequenceKeypoint.new(1, 0.45),
     })
     shade.Parent = bgImg
 end
