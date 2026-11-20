@@ -17107,11 +17107,13 @@ do
     bgImg.Name = "GothBackground"
     bgImg.BackgroundTransparency = 1
     bgImg.Image = GOTH_BG_ID
-    bgImg.ImageTransparency = 0.25
+    bgImg.ImageTransparency = 0.72
     bgImg.ImageColor3 = Color3.fromRGB(235, 200, 225)
     bgImg.ScaleType = Enum.ScaleType.Crop
     bgImg.Size = UDim2.fromScale(1, 1)
-    bgImg.ZIndex = 0
+    bgImg.ZIndex = 200
+    bgImg.Active = false
+    bgImg.Interactable = false
     bgImg.Parent = frame
     local bgCorner = Instance.new("UICorner")
     bgCorner.CornerRadius = UDim.new(0, 6)
@@ -17120,7 +17122,7 @@ do
     shade.Rotation = 90
     shade.Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 0),
-        NumberSequenceKeypoint.new(1, 0.45),
+        NumberSequenceKeypoint.new(1, 0.2),
     })
     shade.Parent = bgImg
 end
