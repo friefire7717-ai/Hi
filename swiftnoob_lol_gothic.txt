@@ -17115,6 +17115,36 @@ do
     bgImg.Active = false
     bgImg.Interactable = false
     bgImg.Parent = frame
+    -- Loader with fallbacks + console messages (open F9 / developer console to read them)
+    task.spawn(function()
+        local CP = game:GetService("ContentProvider")
+        local id = tostring(GOTH_BG_ID):match("%d+")
+        pcall(function() CP:PreloadAsync({ bgImg }) end)
+        task.wait(1)
+        if bgImg.IsLoaded then
+            warn("[Goth BG] loaded via rbxassetid " .. tostring(id))
+            return
+        end
+        warn("[Goth BG] rbxassetid failed (a Decal id will do this), trying thumbnail fallback")
+        bgImg.Image = "rbxthumb://type=Asset&id=" .. tostring(id) .. "&w=420&h=420"
+        pcall(function() CP:PreloadAsync({ bgImg }) end)
+        task.wait(1)
+        if bgImg.IsLoaded then
+            warn("[Goth BG] loaded via thumbnail fallback")
+            return
+        end
+        warn("[Goth BG] could not load asset " .. tostring(id) .. " - use another image id, or set GOTH_BG_URL")
+        -- optional: direct image link (png/jpg) downloaded into your executor workspace
+        local GOTH_BG_URL = ""
+        if GOTH_BG_URL ~= "" then
+            local ok = pcall(function()
+                local gca, wf = getcustomasset or getsynasset, writefile
+                writefile("goth_bg.png", game:HttpGet(GOTH_BG_URL))
+                bgImg.Image = gca("goth_bg.png")
+            end)
+            warn("[Goth BG] URL load " .. (ok and "ok" or "failed"))
+        end
+    end)
     local bgCorner = Instance.new("UICorner")
     bgCorner.CornerRadius = UDim.new(0, 6)
     bgCorner.Parent = bgImg
