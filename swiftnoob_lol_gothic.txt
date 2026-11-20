@@ -61218,7 +61218,164 @@ return jd.c
 end
 end
 do -- je
-local function fn35() tbl17 .aE(); tbl17 .hN();local I,W,N,P= tbl17 .i1(), tbl17 .i8(), tbl17 .jd(),{World="rbxassetid://125685532120024",Lighting="rbxassetid://139232691165198",PostProcessing="rbxassetid://139684165362622",SkyWeather="rbxassetid://140109651313859"};return function(l,a)local e=a:AddTab({Label="World",Icon=P.World,Description="Lighting, post-processing, sky, and ambient sound."});I((e:AddTab({Label="Lighting",Icon=P.Lighting,Description="Override time, exposure, shadows, ambient light, fog, and atmosphere."}):Grid({Columns=2})));W((e:AddTab({Label="Post Processing",Icon=P.PostProcessing,Description="Tune tone, focus, motion, and light effects."}):Grid({Columns=2})));N(l,e:AddTab({Label="Sky & Weather",Icon=P.SkyWeather,Description="Choose a skybox, ambient sound, weather, and lightning."}):Grid({Columns=2}),a);end;end
+-- ===== GOTH TEXTURE SWAPPER (Fleasion-style, client-side only) =====
+tbl17.GothTex = function(grid)
+    local Players = game:GetService("Players")
+    local LP = Players.LocalPlayer
+    local state = { on = false, token = 0, orig = setmetatable({}, { __mode = "k" }), added = {}, conn = nil }
+
+    local left = grid:AddSection({ Title = "Texture Swapper", Side = "left" })
+    local right = grid:AddSection({ Title = "Options", Side = "right" })
+
+    local tEnable = left:AddToggle({ Label = "Enable Texture Swapper" })
+    local dTarget = left:AddDropdown({ Label = "Target", Options = { "Map", "Weapons / Viewmodel", "Other Players", "Everything" } })
+    local tbId = left:AddTextBox({ Label = "Texture ID", Placeholder = "Image id or rbxassetid://..." })
+    local dMat = left:AddDropdown({ Label = "Material", Options = { "None", "SmoothPlastic", "Neon", "ForceField", "Glass", "Metal", "Foil", "Marble", "Granite", "Ice" } })
+    local tPlain = right:AddToggle({ Label = "Texture Plain Parts (heavy)" })
+    local tThumb = right:AddToggle({ Label = "Decal ID Compatibility" })
+
+    local function val(c, d)
+        local ok, v = pcall(function() return c.Value end)
+        if not ok then return d end
+        if type(v) == "table" then v = v[1] end
+        if v == nil or v == "" then return d end
+        return v
+    end
+
+    local function content()
+        local n = tostring(val(tbId, "")):match("%d+")
+        if not n then return nil end
+        if val(tThumb, false) == true then
+            return "rbxthumb://type=Asset&id=" .. n .. "&w=420&h=420"
+        end
+        return "rbxassetid://" .. n
+    end
+
+    local function remember(inst, prop)
+        local t = state.orig[inst]
+        if not t then t = {}; state.orig[inst] = t end
+        if t[prop] == nil then t[prop] = { inst[prop] } end
+    end
+
+    local function setProp(inst, prop, v)
+        remember(inst, prop)
+        inst[prop] = v
+    end
+
+    local function inTarget(inst, target)
+        local cam = workspace.CurrentCamera
+        local inCam = cam ~= nil and inst:IsDescendantOf(cam)
+        local isChar, mine = false, false
+        local p = inst.Parent
+        while p and p ~= workspace do
+            if p:IsA("Model") and p:FindFirstChildOfClass("Humanoid") then
+                isChar = true
+                mine = (p == LP.Character)
+                break
+            end
+            p = p.Parent
+        end
+        if mine then return false end
+        if target == "Weapons / Viewmodel" then return inCam end
+        if target == "Other Players" then return isChar and not inCam end
+        if target == "Map" then return (not inCam) and (not isChar) end
+        return true
+    end
+
+    local function applyTo(inst)
+        if state.orig == nil then return end
+        local target = val(dTarget, "Map")
+        if not inTarget(inst, target) then return end
+        local c = content()
+        if c and (inst:IsA("Decal") or inst:IsA("Texture")) then
+            if inst.Name ~= "GothTex" then setProp(inst, "Texture", c) end
+        elseif c and inst:IsA("SurfaceAppearance") then
+            setProp(inst, "ColorMap", c)
+        elseif c and inst:IsA("SpecialMesh") then
+            setProp(inst, "TextureId", c)
+        end
+        if inst:IsA("BasePart") then
+            if c and inst:IsA("MeshPart") and not inst:FindFirstChildOfClass("SurfaceAppearance") then
+                setProp(inst, "TextureID", c)
+            end
+            local m = val(dMat, "None")
+            if m ~= "None" and Enum.Material[m] then setProp(inst, "Material", Enum.Material[m]) end
+            if c and val(tPlain, false) == true and not inst:IsA("MeshPart") and inst.Transparency < 0.95
+                and math.max(inst.Size.X, inst.Size.Y, inst.Size.Z) >= 6
+                and not inst:FindFirstChild("GothTex") then
+                for _, face in ipairs(Enum.NormalId:GetEnumItems()) do
+                    local t = Instance.new("Texture")
+                    t.Name = "GothTex"
+                    t.Texture = c
+                    t.Face = face
+                    t.StudsPerTileU = 8
+                    t.StudsPerTileV = 8
+                    t.Parent = inst
+                    table.insert(state.added, t)
+                end
+            end
+        end
+    end
+
+    local function restore()
+        state.token = state.token + 1
+        for inst, props in pairs(state.orig) do
+            for prop, box in pairs(props) do
+                pcall(function() inst[prop] = box[1] end)
+            end
+        end
+        state.orig = setmetatable({}, { __mode = "k" })
+        for _, d in ipairs(state.added) do pcall(function() d:Destroy() end) end
+        state.added = {}
+    end
+
+    local function applyAll()
+        state.token = state.token + 1
+        local my = state.token
+        task.spawn(function()
+            local list = workspace:GetDescendants()
+            for i, inst in ipairs(list) do
+                if state.token ~= my or not state.on then return end
+                pcall(applyTo, inst)
+                if i % 250 == 0 then task.wait() end
+            end
+        end)
+    end
+
+    local function turnOn()
+        state.on = true
+        if state.conn then state.conn:Disconnect() end
+        state.conn = workspace.DescendantAdded:Connect(function(inst)
+            task.defer(function()
+                if state.on then pcall(applyTo, inst) end
+            end)
+        end)
+        applyAll()
+    end
+
+    local function turnOff()
+        state.on = false
+        if state.conn then state.conn:Disconnect(); state.conn = nil end
+        restore()
+    end
+
+    tEnable:OnChanged(function(v)
+        if v then turnOn() else turnOff() end
+    end)
+
+    left:AddButton({ Label = "Apply Now", OnClick = function()
+        if not state.on then return end
+        restore()
+        state.on = true
+        applyAll()
+    end })
+    left:AddButton({ Label = "Restore Originals", OnClick = function()
+        turnOff()
+        pcall(function() tEnable:Set(false) end)
+    end })
+end
+-- ===== END GOTH TEXTURE SWAPPER =====
+local function fn35() tbl17 .aE(); tbl17 .hN();local I,W,N,P= tbl17 .i1(), tbl17 .i8(), tbl17 .jd(),{World="rbxassetid://125685532120024",Lighting="rbxassetid://139232691165198",PostProcessing="rbxassetid://139684165362622",SkyWeather="rbxassetid://140109651313859"};return function(l,a)local e=a:AddTab({Label="World",Icon=P.World,Description="Lighting, post-processing, sky, and ambient sound."});pcall(function() tbl17.GothTex(e:AddTab({Label="Textures",Icon=P.World,Description="Fleasion-style texture and material swapper."}):Grid({Columns=2})) end);I((e:AddTab({Label="Lighting",Icon=P.Lighting,Description="Override time, exposure, shadows, ambient light, fog, and atmosphere."}):Grid({Columns=2})));W((e:AddTab({Label="Post Processing",Icon=P.PostProcessing,Description="Tune tone, focus, motion, and light effects."}):Grid({Columns=2})));N(l,e:AddTab({Label="Sky & Weather",Icon=P.SkyWeather,Description="Choose a skybox, ambient sound, weather, and lightning."}):Grid({Columns=2}),a);end;end
 
 tbl17.je = function()
 local je = tbl17.cache.je
